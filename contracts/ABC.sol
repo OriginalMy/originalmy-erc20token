@@ -50,7 +50,7 @@ contract ABC {
         //require(balances[msg.sender] >= _value);
         balances[msg.sender] -= _value;
         balances[_to] += _value;
-        Transfer(msg.sender, _to, _value);
+        emit Transfer(msg.sender, _to, _value);
         return true;
     }
 
@@ -67,7 +67,7 @@ contract ABC {
         if (allowance < MAX_UINT256) {
             allowed[_from][msg.sender] -= _value;
         }
-        Transfer(_from, _to, _value);
+        emit Transfer(_from, _to, _value);
         return true;
     }
 
@@ -80,7 +80,7 @@ contract ABC {
         require(frozenAccount[_spender] != true);
 
         allowed[msg.sender][_spender] = _value;
-        Approval(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
         return true;
     }
 
@@ -90,7 +90,7 @@ contract ABC {
         require(frozenAccount[_spender] != true);
 
         allowed[msg.sender][_spender] = _value;
-        Approval(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
 
         //call the receiveApproval function on the contract you want to be notified. This crafts the function signature manually so one doesn't have to include a contract in here just for this.
         //receiveApproval(address _from, uint256 _value, address _tokenContract, bytes _extraData)
@@ -107,7 +107,7 @@ contract ABC {
         require(msg.sender == owner);
         balances[owner] += _issueQty;
 		totalSupply += _issueQty;
-		Transfer(msg.sender, owner, _issueQty); 
+		emit Transfer(msg.sender, owner, _issueQty); 
         return true;
     }
 	
@@ -116,14 +116,14 @@ contract ABC {
         require(balances[owner] >= _vanishQty);
         balances[owner] -= _vanishQty;
 		totalSupply -= _vanishQty;
-		Transfer(msg.sender, owner, _vanishQty); 
+		emit Transfer(msg.sender, owner, _vanishQty); 
         return true;
     }
 
 	function freezeAccount(address _target, bool _freeze) public returns (bool success) {
         require(msg.sender == owner);
         frozenAccount[_target] = _freeze;
-        FrozenFunds(_target, _freeze);
+        emit FrozenFunds(_target, _freeze);
         return true;
     }
 
